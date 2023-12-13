@@ -1,0 +1,67 @@
+{
+	"sdkName": "celitech",
+	"specFilePath": "swagger.yaml",
+	"languages": [
+    "python",
+    "typescript"
+  ],
+  "createDocs": false,
+  "customizations": {
+    "generateEnv": true,
+    "devContainer": true,
+    "license": {
+      "type": "MIT"
+    },
+    "retry": {
+      "enabled": true,
+      "retryDelay": 150,
+      "maxAttempts": 3
+    },
+    "injectedModels": [],
+    "inferServiceNames": false,
+    "responseHeaders": false,
+    "environmentVariables" : [
+      {
+        "name": "CLIENT_ID",
+        "description": "Client ID parameter"
+      },
+      {
+        "name": "CLIENT_SECRET",
+        "description": "Client Secret parameter"
+      }
+    ],
+  "environments" : [
+    {
+      "name": "TOKEN_SERVER",
+      "url": "https://auth.celitech.net/oauth2/token"
+    },
+    {
+      "name": "PRODUCTION",
+      "url": "https://api.celitech.net/v1"
+    }
+  ]
+},
+  "languageOptions": {
+    "typescript": {
+      "npmName": "",
+      "npmOrg": "",
+      "httpClient": "axios",
+      "bundle": false,
+      "exportClassDefault": false,
+      "githubRepoName": "Test-SDK-Celitecth-Typescript",
+      "sdkVersion": "1.0.0",
+      "ignoreFiles": []
+    },
+    "python": {
+      "pypiPackageName": "",
+      "alwaysInitializeOptionals": false,
+      "githubRepoName": "Test-SDK-Celitecth-Python",
+      "sdkVersion": "1.0.0",
+      "ignoreFiles": []
+    }
+  },
+  "publishing": {
+    "githubOrg": "saerelmasri"
+  }
+  
+}
