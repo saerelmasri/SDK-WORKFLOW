@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-pr:
-    name: Generate SDKs and create PRs (Node.js)
+    name: Generate SDKs and create PRs
     runs-on: ubuntu-latest
     env:
       LIBLAB_TOKEN: ${{ secrets.LIBLAB_TOKEN }}
@@ -16,31 +16,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
-
-      - name: Install liblab (Node.js)
+          node-version: "18" # Specify the node version you want to use
+      - name: Install liblab
         run: npm install -g liblab
-
-      - name: Start Build (Node.js)
+      - name: Start Build
         run: liblab build --skip-validation --approve-docs
-
-      - name: Create PRs to GitHub repos (Node.js)
+      - name: Create PRs to GitHub repos
         run: liblab pr
 
-      - name: Setup Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.12"
-
-      - name: Install liblab (Python)
-        run: pip install liblab
-
-      - name: Start Build (Python)
-        run: liblab build --skip-validation --approve-docs
-
-      - name: Create PRs to GitHub repos (Python)
-        run: liblab pr
