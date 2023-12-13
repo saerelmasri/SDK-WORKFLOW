@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "18"
 
       - name: Install liblab (Node.js)
         run: npm install -g liblab
@@ -34,7 +34,7 @@ jobs:
       - name: Setup Python environment
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.12"
 
       - name: Install liblab (Python)
         run: pip install liblab
