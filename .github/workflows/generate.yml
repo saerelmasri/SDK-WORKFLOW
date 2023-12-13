@@ -21,25 +21,11 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install liblab (Node.js)
+      - name: Install liblab
         run: npm install -g liblab
 
-      - name: Start Build (Node.js)
+      - name: Start Build
         run: liblab build --skip-validation --approve-docs
 
-      - name: Create PRs to GitHub repos (Node.js)
-        run: liblab pr
-
-      - name: Setup Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3"
-
-      - name: Install liblab (Python)
-        run: pip install liblab
-
-      - name: Start Build (Python)
-        run: liblab build --skip-validation --approve-docs
-
-      - name: Create PRs to GitHub repos (Python)
+      - name: Create PRs to GitHub repos
         run: liblab pr
