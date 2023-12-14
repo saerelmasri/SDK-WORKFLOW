@@ -42,7 +42,7 @@
 },
   "languageOptions": {
     "typescript": {
-      "npmName": "Test_Celitech_LibLab",
+      "npmName": "test-celitech-liblab",
       "npmOrg": "",
       "httpClient": "axios",
       "bundle": false,
