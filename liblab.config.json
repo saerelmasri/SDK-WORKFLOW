@@ -58,6 +58,12 @@
       "githubRepoName": "Test-SDK-Celitecth-Python",
       "sdkVersion": "1.0.0",
       "ignoreFiles": []
+    },
+    "java": {
+      "nameSpace": "",
+      "githubRepoName":"Test-SDK-Celitecth-Java",
+      "sdkVersion":"1.0.0",
+      "ignoreFiles": []
     }
   },
   "publishing": {
