@@ -41,7 +41,7 @@
   ]
 },
   "languageOptions": {
-    "python": {
+    "Python": {
       "pypiPackageName": "",
       "alwaysInitializeOptionals": false,
       "githubRepoName": "Test-SDK-Celitecth-Python",
