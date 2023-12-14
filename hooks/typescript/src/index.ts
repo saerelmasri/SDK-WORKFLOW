@@ -78,7 +78,7 @@ export default class CustomHook implements Hook {
         const sdk = new Celitech({ environment: Environment.TOKEN_SERVER });
         // Prepare the request payload for fecthing a fresh Oauth token
         const input = {
-          client_id: Number(clientId) || -1,
+          client_id: clientId || -1,
           client_secret: clientSecret || '',
           grant_type: 'client_credentials',
           scope: '*',
