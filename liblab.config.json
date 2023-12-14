@@ -3,7 +3,8 @@
 	"specFilePath": "swagger.yaml",
 	"languages": [
     "python",
-    "typescript"
+    "typescript",
+    "java"
   ],
   "createDocs": false,
   "customizations": {
