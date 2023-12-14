@@ -2,7 +2,7 @@
 	"sdkName": "celitech",
 	"specFilePath": "swagger.yaml",
 	"languages": [
-    "python"
+    "typescript"
   ],
   "createDocs": false,
   "customizations": {
@@ -41,9 +41,13 @@
   ]
 },
   "languageOptions": {
-    "python": {
-      "pypiPackageName": "",
-      "githubRepoName":"Test-SDK-Python",
+    "typescript": {
+      "npmName": "Test_Celitech_LibLab",
+      "npmOrg": "",
+      "httpClient": "axios",
+      "bundle": false,
+      "exportClassDefault": false,
+      "githubRepoName": "Test-SDK-Celitecth-Typescript",
       "sdkVersion": "1.0.0",
       "ignoreFiles": []
     }
