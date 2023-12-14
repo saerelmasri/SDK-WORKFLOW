@@ -48,7 +48,7 @@
       "bundle": false,
       "exportClassDefault": false,
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
-      "sdkVersion": "1.0.4",
+      "sdkVersion": "1.0.5",
       "ignoreFiles": []
     }
   },
