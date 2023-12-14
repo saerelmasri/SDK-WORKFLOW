@@ -1,5 +1,6 @@
-import { Celitech, Environment } from '..';
-import HTTPLibrary from '../http/HTTPLibrary';
+import { Environment } from '../../../output/typescript/src/http/Environment';
+import { Celitech } from '../../../output/typescript/src';
+import HTTPLibrary from '../../../output/typescript/src/http/HTTPLibrary';
 ​
 let CURRENT_TOKEN = '';
 let CURRENT_EXPIRY = -1;
