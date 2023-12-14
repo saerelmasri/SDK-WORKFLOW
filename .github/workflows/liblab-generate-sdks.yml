@@ -1,4 +1,4 @@
-ame: Generate SDKs using liblab
+name: Generate SDKs using liblab
 
 on:
   # Add any other triggers you want here, such as a push to the spec file
