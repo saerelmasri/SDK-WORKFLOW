@@ -41,7 +41,7 @@
   ]
 },
   "languageOptions": {
-    "Python": {
+    "python": {
       "pypiPackageName": "",
       "githubRepoName":"Test-SDK-Python",
       "sdkVersion": "1.0.0",
