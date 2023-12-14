@@ -41,7 +41,7 @@ info:
     altText: CELITECH API
 
 servers:
-  - url: https://api.celitech.net/v1
+  - url: https://tshnuiufz7.execute-api.us-east-1.amazonaws.com/test
 
 components:
   securitySchemes:
