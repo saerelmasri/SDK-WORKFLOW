@@ -32,11 +32,11 @@
   "environments" : [
     {
       "name": "TOKEN_SERVER",
-      "url": "https://auth.celitech.net/oauth2/token"
+      "url": "https://test-core-partners.auth.us-east-1.amazoncognito.com/oauth2/token"
     },
     {
       "name": "PRODUCTION",
-      "url": "https://api.celitech.net/v1"
+      "url": "https://tshnuiufz7.execute-api.us-east-1.amazonaws.com/test"
     }
   ]
 },
@@ -48,7 +48,7 @@
       "bundle": false,
       "exportClassDefault": false,
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
-      "sdkVersion": "1.0.0",
+      "sdkVersion": "1.0.3",
       "ignoreFiles": []
     }
   },
