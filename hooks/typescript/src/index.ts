@@ -65,12 +65,16 @@ export interface Hook {
 export default class CustomHook implements Hook {
   async beforeRequest(request: Request): Promise<void> {
     if (request.url.endsWith('/oauth/token')) return;
+    
     // Get the client_id and client_secret from environment variables
     const clientId: string = process.env.CLIENT_ID || '';
     const clientSecret: string = process.env.CLIENT_SECRET || '';
+    console.log("Process env", process.env);
+    console.log("Env", Environment.TOKEN_SERVER);
 
     if (!clientId || !clientSecret) {
       console.error('Missing CLIENT_ID and/or CLIENT_SECRET environment variables');
+      console.error('Url:',request.url);
       return;
     } else {
       // Check if CURRENT_TOKEN is missing or CURRENT_EXPIRY is in the past
@@ -78,12 +82,12 @@ export default class CustomHook implements Hook {
         const sdk = new Celitech({ environment: Environment.TOKEN_SERVER });
         // Prepare the request payload for fecthing a fresh Oauth token
         const input = {
-          client_id: Number(clientId) || -1,
+          client_id: clientId || '',
           client_secret: clientSecret || '',
           grant_type: 'client_credentials',
-          scope: '*',
         };
-
+        console.log("Log input:", input);
+        
         // Fetch a fresh Oauth token
         // Retrieve the new access token and expiry, and set them to the global variables
         const tokenResponse = await this.doPost(request, input, '/oauth2/token');
@@ -108,16 +112,18 @@ export default class CustomHook implements Hook {
   }
 
   async doPost(request: Request, input: any, urlEndpoint: string): Promise<any> {
-    const indexOfDotNet = request.url.indexOf('.net');
+    const indexOfDotNet = request.url.indexOf('.com');
     const baseUrl = request.url.substring(0, indexOfDotNet + 4);
-    const fullUrl = `${baseUrl}${urlEndpoint}`;
+    const fullUrl = "https://test-core-partners.auth.us-east-1.amazoncognito.com/oauth2/token";
 
+    console.log("baseURL", baseUrl);
+    console.log("fullURL", fullUrl);
     try {
       const resp = await new HTTPLibrary().post(
         fullUrl,
         input,
         {
-          'Content-type': 'application/json',
+          'Content-type': 'application/x-www-form-urlencoded',
         },
         true,
       );
