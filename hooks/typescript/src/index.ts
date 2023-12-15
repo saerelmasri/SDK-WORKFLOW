@@ -1,4 +1,4 @@
-import { Celitech, Environment } from '..';
+import { Celitech } from '..';
 import HTTPLibrary from '../http/HTTPLibrary';
 
 let CURRENT_TOKEN = '';
@@ -79,7 +79,6 @@ export default class CustomHook implements Hook {
     } else {
       // Check if CURRENT_TOKEN is missing or CURRENT_EXPIRY is in the past
       if (!CURRENT_TOKEN || CURRENT_EXPIRY < Date.now()) {
-        const sdk = new Celitech({ environment: Environment.TOKEN_SERVER });
         // Prepare the request payload for fecthing a fresh Oauth token
         const input = {
           client_id: clientId || '',
