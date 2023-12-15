@@ -28,17 +28,7 @@
         "name": "CLIENT_SECRET",
         "description": "Client Secret parameter"
       }
-    ],
-  "environments" : [
-    {
-      "name": "TOKEN_SERVER",
-      "url": "https://test-core-partners.auth.us-east-1.amazoncognito.com/oauth2/token"
-    },
-    {
-      "name": "PRODUCTION",
-      "url": "https://tshnuiufz7.execute-api.us-east-1.amazonaws.com/test"
-    }
-  ]
+    ]
 },
   "languageOptions": {
     "typescript": {
@@ -48,7 +38,7 @@
       "bundle": false,
       "exportClassDefault": false,
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
-      "sdkVersion": "1.0.8",
+      "sdkVersion": "1.0.9",
       "ignoreFiles": []
     }
   },
