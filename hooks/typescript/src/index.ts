@@ -70,8 +70,6 @@ export default class CustomHook implements Hook {
     const clientId: string = process.env.CLIENT_ID || '';
     const clientSecret: string = process.env.CLIENT_SECRET || '';
     console.log("Process env", process.env);
-    console.log("Env", Environment.TOKEN_SERVER);
-
     if (!clientId || !clientSecret) {
       console.error('Missing CLIENT_ID and/or CLIENT_SECRET environment variables');
       console.error('Url:',request.url);
