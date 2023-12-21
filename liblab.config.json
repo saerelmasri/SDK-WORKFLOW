@@ -1,10 +1,10 @@
 {
 	"sdkName": "celitech",
-	"specFilePath": "swagger.yaml",
+	"specFilePath": "swagger1.yaml",
 	"languages": [
     "typescript"
   ],
-  "createDocs": false,
+  "createDocs": true,
   "customizations": {
     "generateEnv": true,
     "devContainer": true,
@@ -38,7 +38,7 @@
       "bundle": false,
       "exportClassDefault": false,
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
-      "sdkVersion": "1.1.1",
+      "sdkVersion": "1.1.2",
       "ignoreFiles": []
     }
   },
