@@ -1,0 +1,3057 @@
+openapi: 3.0.2
+info:
+  title: CELITECH API
+  version: 1.1.0
+  contact:
+    name: Celitech
+    email: info@celitech.com
+  description: |
+    Welcome to the CELITECH API documentation!
+
+    Useful links: [Homepage](https://www.celitech.com) | [Support email](mailto:support@celitech.com) | [Blog](https://www.celitech.com/blog/)
+
+    # Introduction
+
+    This guide is your go-to resource for the CELITECH API, with full documentation and schemas.
+
+    Need help? Email us at support@celitech.com.
+
+    "Partners" refers to online service providers that use our eSIM API. Access levels include Gold, Platinum, and Diamond.
+
+    ## API
+
+    The CELITECH API is designed for use by partner platforms, including both web and mobile applications. It's assumed all endpoint calls are initiated from the backend of an integrated platform.
+
+    API URL: `https://api.celitech.net/v1`
+
+    ## Authentication & Authorization
+    CELITECH API uses the OAuth 2.0 protocol for authentication and authorization.
+    The endpoints are protected using client credentials flow which is based on a token exchange. The token has a defined life span (typically 1 hour), after which a new token must be obtained.
+
+    To begin, obtain OAuth 2.0 client credentials ( **CLIENT_ID** & **CLIENT_SECRET** ) from the [CELITECH Dashboard](https://www.dashboard.celitech.com/). Then your client application requests an access token from the CELITECH Authorization Server, extracts a token from the response, and sends the token to the CELITECH API that you want to access.
+
+    Security Scheme Type: `OAuth2`
+
+    Flow type: `clientCredentials`
+
+    Token URL: `https://auth.celitech.net/oauth2/token`
+
+  x-logo:
+    url: /logo.png
+    altText: CELITECH API
+
+servers:
+  - url: https://tshnuiufz7.execute-api.us-east-1.amazonaws.com/test
+
+components:
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://test-core-partners.auth.us-east-1.amazoncognito.com/oauth2/token
+          scopes: {}
+
+security:
+  - oAuth2ClientCredentials: []
+
+paths:
+  /destinations:
+    get:
+      summary: List Destinations
+      operationId: listDestinations
+      description: Name of the destinations
+      tags:
+        - Destinations
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  destinations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: France
+                          description: Name of the destination
+                        destination:
+                          type: string
+                          example: FRA
+                          description: ISO representation of the destination
+                        supportedCountries:
+                          type: array
+                          example: ["France"]
+                          items:
+                            type: string
+                            description: This array indicates the geographical area covered by a specific destination. If the destination represents a single country, the array will include that country. However, if the destination represents a broader regional scope, the array will be populated with the names of the countries belonging to that region.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              https://api.celitech.net/v1/destinations \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/destinations`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/destinations"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                var request = await client.GetAsync("https://api.celitech.net/v1/destinations");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/destinations";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/destinations"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/destinations",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/destinations')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /packages:
+    get:
+      summary: List Packages
+      description: List of available packages
+      operationId: listPackages
+      tags:
+        - Packages
+      parameters:
+        - in: query
+          name: destination
+          schema:
+            type: string
+            example: FRA
+            description: ISO representation of the package's destination. Optional, unless startDate and endDate are used, then it becomes mandatory.
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+            example: 2023-11-01
+          description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+            example: 2023-11-20
+          description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
+        - in: query
+          name: afterCursor
+          schema:
+            type: string
+            example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+            description: To get the next batch of results, use this parameter. It tells the API where to start fetching data after the last item you received. It helps you avoid repeats and efficiently browse through large sets of data.
+        - in: query
+          name: limit
+          schema:
+            type: number
+            example: 20
+            description: Maximum number of packages to be returned in the response. The value must be greater than 0 and less than or equal to 160. If not provided, the default value is 20
+        - in: query
+          name: startTime
+          deprecated: true
+          schema:
+            type: integer
+            example: 1672052449
+            description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months
+        - in: query
+          name: endTime
+          deprecated: true
+          schema:
+            type: integer
+            example: 1672396681
+            description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time
+        - in: query
+          name: duration
+          deprecated: true
+          schema:
+            type: number
+            example: 344232
+            description: Duration in seconds for the package's validity. If this parameter is present, it will override the startTime and endTime parameters. The maximum duration for a package's validity period is 60 days
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  packages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 4973fa15-6979-4daa-9cf3-672620df819c
+                          description: ID of the package
+                        destination:
+                          type: string
+                          example: FRA
+                          description: ISO representation of the package's destination
+                        dataLimitInBytes:
+                          type: number
+                          example: 1073741824
+                          description: Size of the package in Bytes
+                        minDays:
+                          type: number
+                          example: 0
+                          description: Min number of days for the package
+                        maxDays:
+                          type: number
+                          example: 30
+                          description: Max number of days for the package
+                        priceInCents:
+                          type: number
+                          example: 10000
+                          description: Price of the package in cents
+                  afterCursor:
+                    type: string
+                    example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+                    description: The cursor value representing the end of the current page of results. Use this cursor value as the "afterCursor" parameter in your next request to retrieve the subsequent page of results. It ensures that you continue fetching data from where you left off, facilitating smooth pagination
+                    nullable: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              https://api.celitech.net/v1/packages \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/packages`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/packages"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                var request = await client.GetAsync("https://api.celitech.net/v1/packages");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/packages";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/packages"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/packages",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/packages')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /purchases:
+    post:
+      summary: Create Purchase
+      description: This endpoint is used to purchase a new eSIM by providing the package details.
+      operationId: createPurchase
+      tags:
+        - Purchases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test:
+                  type: string
+                  description: TEST
+                destination:
+                  type: string
+                  example: FRA
+                  description: ISO representation of the package's destination
+                dataLimitInGB:
+                  type: number
+                  example: 1
+                  description: Size of the package in GB. The available options are 1, 2, 3, 5, 8, 20GB
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
+                email:
+                  type: string
+                  example: example@domain.com
+                  description: Email address where the purchase confirmation email will be sent (including QR Code & activation steps)
+                networkBrand:
+                  type: string
+                  example: CELITECH
+                  description: Customize the network brand of the issued eSIM. This parameter is accessible to platforms with Diamond tier and requires an alphanumeric string of up to 15 characters
+                startTime:
+                  deprecated: true
+                  type: number
+                  example: 1672051891
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  example: 1672396681
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time. 
+              required:
+                - destination
+                - dataLimitInGB
+                - startDate
+                - endDate
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchase:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1b97b67a-f4ea-45ff-bbc1-8f424b1418c4
+                        description: ID of the purchase
+                      packageId:
+                        type: string
+                        example: 6cf19d46-b545-4029-a46b-cdeba22b6957
+                        description: ID of the package
+                      startDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-01T00:00:00+02:00
+                        description: Start date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      endDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-20T23:59:59+02:00
+                        description: End date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      createdDate:
+                        type: string
+                        format: date-time
+                        example: 2023-10-20T00:00:00+00:00
+                        description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      startTime:
+                        deprecated: true
+                        type: number
+                        example: 1672051891
+                        description: Epoch value representing the start time of the package's validity
+                      endTime:
+                        deprecated: true
+                        type: number
+                        example: 1672396681
+                        description: Epoch value representing the end time of the package's validity
+                  profile:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      activationCode:
+                        type: string
+                        example: iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABmJLR0QA/wD/AP+gvaeTAAAHRklEQVR4nO3d245TMQwF0Bbx/79cnkc6QQRi7Mxe6xFV6aHtbEW52O/P5/N5AZF+dD8A0EcAQDABAMEEAAT7+fSP7/f7fz/HX1mtX66ef/f1u++70vU8u+97SvXznxqn6/fT5en5zQAgmACAYAIAggkACCYAINjjLsBK16nhU6usp1bFu55n2u7Aqeeftop+6nd+w9+LGQAEEwAQTABAMAEAwQQABNvaBVg5tYpbvWpavSredSa/6y7DKbd/77sm/b2YAUAwAQDBBAAEEwAQTABAsCO7ANOcOkvf9frV83edLb+lAtKp50liBgDBBAAEEwAQTABAMAEAwb7lLsBK9Rn4aWfIu/6/1fX2T+2e2B0wA4BoAgCCCQAIJgAgmACAYEd2Aaatmlav7t5+Fn3abkLaXYBJfy9mABBMAEAwAQDBBAAEEwAQbGsXYFoX11NOnVGvrvN/qqLOyi19E6Z9/rvjTGIGAMEEAAQTABBMAEAwAQDBHncBJp1Vvsm0Vd/q1fVpXY9PjX9qd+MGZgAQTABAMAEAwQQABBMAEOxIRaBbzqJX+67P01VhqauyUPXuQ9edgqf3NQOAYAIAggkACCYAIJgAgGCPuwBdZ9qdLf/966sr1Zzq0rtSfca+63db/blVMgOAYAIAggkACCYAIJgAgGAtFYGqz3jvql6l39W12r/SdWa++o5J1zinxj/x/ZoBQDABAMEEAAQTABBMAECwI92BT60Sd51pPzX+rq46/F3fY9eqfvXzd931ODGOGQAEEwAQTABAMAEAwQQABHt/HpYGp53B7upyuzKtf8G03Zld035vp9zQL8MMAIIJAAgmACCYAIBgAgCCjaoIdOrMc7VbutZOqj//euXdfTil8ns0A4BgAgCCCQAIJgAgmACAYC3dgbvq298yzsp3fc5dXf0Xur6vU+M/MQOAYAIAggkACCYAIJgAgGCPFYG2B2k6472r631XunZbbtkd6HrOleoKV9Xv+8QMAIIJAAgmACCYAIBgAgCCHekO3PX6la7V2pXdSke7Vs9Zvetxe6Wmlep+E139Mp6YAUAwAQDBBAAEEwAQTABAsK2KQNPO9q9Mq58/7fO8fbela7V/Zdr3u8MMAIIJAAgmACCYAIBgAgCCbXUHntYVt+tMe1flnBvOlk+0+/zV/99T36++AMA/EQAQTABAMAEAwQQABNvqC3DLavZKV6WaldtX12+/U7Byyy7Mib9HMwAIJgAgmACAYAIAggkACFbaHXilup58dV33U++7O061ad/j7vueMm21v3J8MwAIJgAgmACAYAIAggkACPa4CzCtEs6uaXXjq03bNejaDZm2a9P1O9EdGPgjAgCCCQAIJgAgmACAYI99AXZN6667a1rd+K5usx116X9n2vPsuuFuiBkABBMAEEwAQDABAMEEAAQ7UhFoOfiw+v9ddw2qV+NvOWO/65b3rVb5+zEDgGACAIIJAAgmACCYAIBgW3cBulZHu7oSd61Cdz3/Kbe877Q7ILtO7HaZAUAwAQDBBAAEEwAQTABAsMddgGl10avPrk+7s7Ay7Q5FVyWi6nGqx+/6vT0xA4BgAgCCCQAIJgAgmACAYFt3AbpWU6vPlk874z2ta23166t3GXbdUlnoxHOaAUAwAQDBBAAEEwAQTABAsK2+ALecXd81bfdh2ue80vX5d/U1mPY8u+PrCwB8IQAgmACAYAIAggkACHbkLsCp1eBpXW6nmVaZZ9odipXqfg0rk1b7V8wAIJgAgGACAIIJAAgmACDYVl+A3dXgU6vTXWfmp3Xpra7MU63rc1i5uZ7/KWYAEEwAQDABAMEEAAQTABBs6y7Arlv6CEzrhlxt9/m7dnOmra5Pq7ykLwDwTwQABBMAEEwAQDABAMGO7ALc0AX1b8bfXRU/Nf60yj/V40w7k9/Vl6FjN8QMAIIJAAgmACCYAIBgAgCCld4FWJlWz796VbxrtXx3nK7PeeWWfgQ3VygyA4BgAgCCCQAIJgAgmACAYI+7AF2r06fGv6UyT9eZ9q6z+ru67lzsjr9r0q6WGQAEEwAQTABAMAEAwQQABNvqDjzNqW7Fu6b1EbjlDH9XV+VqN1dYMgOAYAIAggkACCYAIJgAgGBbFYGmdUfdVd0Vt2t3YNpdiWln76t3GW6pUOQuAPCFAIBgAgCCCQAIJgAg2KjuwNMqrnR16T3lljsLXbsq1V2hd1XvejwxA4BgAgCCCQAIJgAgmACAYC3dgW+xu+o7rYLNd737sKtjdf31Ovd5nqp85S4A8IUAgGACAIIJAAgmACBY1C5A19n+21ePd02r83/q89l1w+/NDACCCQAIJgAgmACAYAIAgh3ZBZhWF/3UKvS0ij2nVo9Xqj+3ropJt3Qrrv5+n5gBQDABAMEEAAQTABBMAECw9+dhiXFaZZuV6j4C07ohp/1/u9xwhv8UMwAIJgAgmACAYAIAggkACPa4CwBkMAOAYAIAggkACCYAINgvCaqkMmOR1zUAAAAASUVORK5CYII=
+                        description: QR Code of the eSIM as base64
+                        minLength: 1000
+                        maxLength: 8000
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X POST \
+              https://api.celitech.net/v1/purchases \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                "destination": "FRA",
+                "dataLimitInGB": 1,
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/purchases`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  },
+                  body: JSON.stringify({
+                    destination: 'FRA',
+                    dataLimitInGB: 1,
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  })
+                }
+              );
+
+              const data = await resp.json();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/purchases"
+
+            payload = {
+              "destination": "FRA",
+              "dataLimitInGB": 1,
+              "startDate": "2023-11-01",
+              "endDate": "2023-11-20"
+            }
+
+            headers = {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer <YOUR_TOKEN_HERE>"
+            }
+
+            response = requests.post(url, json=payload, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+            using System.Text;
+            using Newtonsoft.Json.Linq;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                JObject json = JObject.Parse(@"{
+                    destination: 'FRA',
+                    dataLimitInGB: 1,
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  }");
+                var postData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+                var request = await client.PostAsync("https://api.celitech.net/v1/purchases", postData);
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var payload = String.join("\n"
+                  , "{"
+                  , " \"destination\": \"FRA\","
+                  , " \"dataLimitInGB\": 1,"
+                  , " \"startDate\": \"2023-11-01\","
+                  , " \"endDate\": \"2023-11-20\""
+                  , "}"
+                );
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/purchases";
+                var request = HttpRequest.newBuilder()
+                  .POST(HttpRequest.BodyPublishers.ofString(payload))
+                  .uri(URI.create(host + pathname ))
+                  .header("Content-Type", "application/json")
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "bytes"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/purchases"
+              var data = []byte(`{
+                "destination": "FRA",
+                "dataLimitInGB": 1,
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }`)
+              req, _ := http.NewRequest("POST", reqUrl, bytes.NewBuffer(data))
+              req.Header.Add("Content-Type", "application/json")
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            $payload = array(
+              "destination" => "FRA",
+              "dataLimitInGB" => 1,
+              "startDate" => "2023-11-01",
+              "endDate" => "2023-11-20"
+            );
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>",
+                "Content-Type: application/json"
+              ],
+              CURLOPT_POSTFIELDS => json_encode($payload),
+              CURLOPT_URL => "https://api.celitech.net/v1/purchases",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "POST",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'json'
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/purchases')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Post.new(url)
+            request['Content-Type'] = 'application/json'
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+            request.body = {
+              destination: 'FRA',
+              dataLimitInGB: 1,
+              startDate: '2023-11-01',
+              endDate: '2023-11-20'
+            }.to_json
+
+            response = http.request(request)
+            puts response.read_body
+    get:
+      summary: List Purchases
+      description: This endpoint can be used to list all the successful purchases made between a given interval.
+      operationId: listPurchases
+      tags:
+        - Purchases
+      parameters:
+        - in: query
+          name: iccid
+          schema:
+            type: string
+            example: "1111222233334444555"
+            description: ID of the eSIM
+            minLength: 18
+            maxLength: 22
+        - in: query
+          name: afterDate
+          schema:
+            type: string
+            format: date
+            example: 2023-11-01
+          description: Start date of the interval for filtering purchases in the format 'yyyy-MM-dd'
+        - in: query
+          name: beforeDate
+          schema:
+            type: string
+            format: date
+            example: 2023-11-20
+          description: End date of the interval for filtering purchases in the format 'yyyy-MM-dd'
+        - in: query
+          name: afterCursor
+          schema:
+            type: string
+            example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+            description: To get the next batch of results, use this parameter. It tells the API where to start fetching data after the last item you received. It helps you avoid repeats and efficiently browse through large sets of data.
+        - in: query
+          name: limit
+          schema:
+            type: number
+            example: 20
+            description: Maximum number of purchases to be returned in the response. The value must be greater than 0 and less than or equal to 100. If not provided, the default value is 20
+        - in: query
+          name: after
+          deprecated: true
+          schema:
+            type: number
+            example: 1672052365
+            description: Epoch value representing the start of the time interval for filtering purchases
+        - in: query
+          name: before
+          deprecated: true
+          schema:
+            type: number
+            example: 1672396681
+            description: Epoch value representing the end of the time interval for filtering purchases
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 4973fa15-6979-4daa-9cf3-672620df819c
+                          description: ID of the purchase
+                        startDate:
+                          type: string
+                          format: date-time
+                          example: 2023-11-01T00:00:00+02:00
+                          description: Start date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                        endDate:
+                          type: string
+                          format: date-time
+                          example: 2023-11-20T23:59:59+02:00
+                          description: End date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                        createdDate:
+                          type: string
+                          format: date-time
+                          example: 2023-10-20T00:00:00+00:00
+                          description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                        startTime:
+                          deprecated: true
+                          type: number
+                          example: 1073741824
+                          description: Epoch value representing the start time of the package's validity
+                        endTime:
+                          deprecated: true
+                          type: number
+                          example: 1073841824
+                          description: Epoch value representing the end time of the package's validity
+                        createdAt:
+                          deprecated: true
+                          type: number
+                          example: 1073841824
+                          description: Epoch value representing the date of creation of the purchase
+                        package:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 4973fa15-6979-4daa-9cf3-672620df819c
+                              description: ID of the package
+                            dataLimitInBytes:
+                              type: number
+                              example: 1073741824
+                              description: Size of the package in Bytes
+                            destination:
+                              type: string
+                              example: FRA
+                              description: ISO representation of the package's destination
+                            destinationName:
+                              type: string
+                              example: France
+                              description: Name of the package's destination
+                            priceInCents:
+                              type: number
+                              example: 10000
+                              description: Price of the package in cents
+                        esim:
+                          type: object
+                          properties:
+                            iccid:
+                              type: string
+                              example: "1111222233334444555"
+                              description: ID of the eSIM
+                              minLength: 18
+                              maxLength: 22
+                        source:
+                          type: string
+                          example: API
+                          description: The source indicates where the eSIM was purchased, which can be from the API, dashboard, or landing-page. For purchases made before September 8, 2023, the value will be displayed as 'Not available'.
+                  afterCursor:
+                    type: string
+                    example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+                    description: The cursor value representing the end of the current page of results. Use this cursor value as the "afterCursor" parameter in your next request to retrieve the subsequent page of results. It ensures that you continue fetching data from where you left off, facilitating smooth pagination.
+                    nullable: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              https://api.celitech.net/v1/purchases \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/purchases`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/purchases"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                var request = await client.GetAsync("https://api.celitech.net/v1/purchases");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/purchases";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/purchases"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/purchases",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang/purchases/topup: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/purchases')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /purchases/topup:
+    post:
+      summary: Top-up eSIM
+      description: This endpoint is used to top-up an eSIM with the previously associated destination by providing an existing ICCID and the package details. The top-up is not feasible for eSIMs in "DELETED" or "ERROR" state.
+      operationId: topUpESIM
+      tags:
+        - Purchases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: "1111222233334444555"
+                  description: ID of the eSIM
+                  minLength: 18
+                  maxLength: 22
+                dataLimitInGB:
+                  type: number
+                  example: 1
+                  description: Size of the package in GB. The available options are 1, 2, 3, 5, 8, 20GB
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
+                email:
+                  type: string
+                  example: example@domain.com
+                  description: Email address where the purchase confirmation email will be sent (excluding QR Code & activation steps)
+                startTime:
+                  deprecated: true
+                  type: number
+                  example: 1672051891
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  example: 1672396681
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
+              required:
+                - iccid
+                - dataLimitInGB
+                - startDate
+                - endDate
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchase:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1b97b67a-f4ea-45ff-bbc1-8f424b1418c4
+                        description: ID of the purchase
+                      packageId:
+                        type: string
+                        example: 6cf19d46-b545-4029-a46b-cdeba22b6957
+                        description: ID of the package
+                      startDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-01T00:00:00+02:00
+                        description: Start date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      endDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-20T23:59:59+02:00
+                        description: End date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      createdDate:
+                        type: string
+                        format: date-time
+                        example: 2023-10-20T00:00:00+00:00
+                        description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      startTime:
+                        deprecated: true
+                        type: number
+                        example: 1672051891
+                        description: Epoch value representing the start time of the package's validity
+                      endTime:
+                        deprecated: true
+                        type: number
+                        example: 1672396681
+                        description: Epoch value representing the end time of the package's validity
+                  profile:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X POST \
+              https://api.celitech.net/v1/purchases/topup \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                "iccid": "1111222233334444555",
+                "dataLimitInGB": 1,
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/purchases/topup`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  },
+                  body: JSON.stringify({
+                    iccid: '1111222233334444555',
+                    dataLimitInGB: 1,
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  })
+                }
+              );
+
+              const data = await resp.json();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/purchases/topup"
+
+            payload = {
+              "iccid": "1111222233334444555",
+              "dataLimitInGB": 1,
+              "startDate": "2023-11-01",
+              "endDate": "2023-11-20"
+            }
+
+            headers = {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer <YOUR_TOKEN_HERE>"
+            }
+
+            response = requests.post(url, json=payload, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+            using System.Text;
+            using Newtonsoft.Json.Linq;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                JObject json = JObject.Parse(@"{
+                    iccid: '1111222233334444555',
+                    dataLimitInGB: 1,
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  }");
+                var postData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+                var request = await client.PostAsync("https://api.celitech.net/v1/purchases/topup", postData);
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var payload = String.join("\n"
+                  , "{"
+                  , " \"iccid\": \"1111222233334444555\","
+                  , " \"dataLimitInGB\": 1,"
+                  , " \"startDate\": \"2023-11-01\","
+                  , " \"endDate\": \"2023-11-20\""
+                  , "}"
+                );
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/purchases/topup";
+                var request = HttpRequest.newBuilder()
+                  .POST(HttpRequest.BodyPublishers.ofString(payload))
+                  .uri(URI.create(host + pathname ))
+                  .header("Content-Type", "application/json")
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "bytes"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/purchases/topup"
+              var data = []byte(`{
+                "iccid": "1111222233334444555",
+                "dataLimitInGB": 1,
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }`)
+              req, _ := http.NewRequest("POST", reqUrl, bytes.NewBuffer(data))
+              req.Header.Add("Content-Type", "application/json")
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            $payload = array(
+              "iccid" => "1111222233334444555",
+              "dataLimitInGB" => 1,
+              "startDate" => "2023-11-01",
+              "endDate" => "2023-11-20"
+            );
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>",
+                "Content-Type: application/json"
+              ],
+              CURLOPT_POSTFIELDS => json_encode($payload),
+              CURLOPT_URL => "https://api.celitech.net/v1/purchases/topup",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "POST",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'json'
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/purchases/topup')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Post.new(url)
+            request['Content-Type'] = 'application/json'
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+            request.body = {
+              iccid: '1111222233334444555',
+              dataLimitInGB: 1,
+              startDate: '2023-11-01',
+              endDate: '2023-11-20'
+            }.to_json
+
+            response = http.request(request)
+            puts response.read_body
+
+  /purchases/edit:
+    post:
+      summary: Edit Purchase
+      description: This endpoint allows you to modify the dates of an existing package with a future activation start time. Editing can only be performed for packages that have not been activated, and it cannot change the package size. The modification must not change the package duration category to ensure pricing consistency.
+      operationId: editPurchase
+      tags:
+        - Purchases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - purchaseId
+                - startDate
+                - endDate
+              properties:
+                purchaseId:
+                  type: string
+                  example: ae471106-c8b4-42cf-b83a-b061291f2922
+                  description: ID of the purchase
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
+                startTime:
+                  deprecated: true
+                  type: number
+                  example: 1672051891
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  example: 1672396681
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseId:
+                    type: string
+                    example: ae471106-c8b4-42cf-b83a-b061291f2922
+                    description: ID of the purchase
+                  newStartDate:
+                    type: string
+                    format: date-time
+                    example: 2023-11-01T00:00:00+02:00
+                    description: Start date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                  newEndDate:
+                    type: string
+                    format: date-time
+                    example: 2023-11-20T23:59:59+02:00
+                    description: End date of the package's validity in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                  newStartTime:
+                    deprecated: true
+                    type: number
+                    example: 1579168309
+                    description: Epoch value representing the new start time of the package's validity
+                  newEndTime:
+                    deprecated: true
+                    type: number
+                    example: 1579178309
+                    description: Epoch value representing the new end time of the package's validity
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X POST \
+              https://api.celitech.net/v1/purchases/edit \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                "purchaseId": "ae471106-c8b4-42cf-b83a-b061291f2922",
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const resp = await fetch(
+                `https://api.celitech.net/v1/purchases/edit`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  },
+                  body: JSON.stringify({
+                    purchaseId: 'ae471106-c8b4-42cf-b83a-b061291f2922',
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  })
+                }
+              );
+
+              const data = await resp.json();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/purchases/edit"
+
+            payload = {
+              "purchaseId": "ae471106-c8b4-42cf-b83a-b061291f2922",
+              "startDate": "2023-11-01",
+              "endDate": "2023-11-20"
+            }
+
+            headers = {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer <YOUR_TOKEN_HERE>"
+            }
+
+            response = requests.post(url, json=payload, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+            using System.Text;
+            using Newtonsoft.Json.Linq;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                JObject json = JObject.Parse(@"{
+                    purchaseId: 'ae471106-c8b4-42cf-b83a-b061291f2922',
+                    startDate: '2023-11-01',
+                    endDate: '2023-11-20'
+                  }");
+                var postData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+                var request = await client.PostAsync("https://api.celitech.net/v1/purchases/edit", postData);
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var payload = String.join("\n"
+                  , "{"
+                  , " \"purchaseId\": \"ae471106-c8b4-42cf-b83a-b061291f2922\","
+                  , " \"startDate\": \"2023-11-01\","
+                  , " \"endDate\": \"2023-11-20\""
+                  , "}"
+                );
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/purchases/edit";
+                var request = HttpRequest.newBuilder()
+                  .POST(HttpRequest.BodyPublishers.ofString(payload))
+                  .uri(URI.create(host + pathname ))
+                  .header("Content-Type", "application/json")
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "bytes"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/purchases/edit"
+              var data = []byte(`{
+                "purchaseId": "ae471106-c8b4-42cf-b83a-b061291f2922",
+                "startDate": "2023-11-01",
+                "endDate": "2023-11-20"
+              }`)
+              req, _ := http.NewRequest("POST", reqUrl, bytes.NewBuffer(data))
+              req.Header.Add("Content-Type", "application/json")
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $curl = curl_init();
+
+            $payload = array(
+              "purchaseId" => "ae471106-c8b4-42cf-b83a-b061291f2922",
+              "startDate" => "2023-11-01",
+              "endDate" => "2023-11-20"
+            );
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>",
+                "Content-Type: application/json"
+              ],
+              CURLOPT_POSTFIELDS => json_encode($payload),
+              CURLOPT_URL => "https://api.celitech.net/v1/purchases/edit",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "POST",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'json'
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/purchases/edit')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Post.new(url)
+            request['Content-Type'] = 'application/json'
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+            request.body = {
+              purchaseId: 'ae471106-c8b4-42cf-b83a-b061291f2922',
+              startDate: '2023-11-01',
+              endDate: '2023-11-20'
+            }.to_json
+
+            response = http.request(request)
+            puts response.read_body
+
+  /purchases/{purchaseId}/consumption:
+    get:
+      summary: Get Purchase Consumption
+      description: This endpoint can be called for consumption notifications (e.g. every 1 hour or when the user clicks a button). It returns the data balance (consumption) of purchased packages.
+      operationId: getPurchaseConsumption
+      tags:
+        - Purchases
+      parameters:
+        - in: path
+          required: true
+          name: purchaseId
+          schema:
+            type: string
+            example: 4973fa15-6979-4daa-9cf3-672620df819c
+            description: ID of the purchase
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataUsageRemainingInBytes:
+                    type: number
+                    example: 1073741824
+                    description: Remaining balance of the package in bytes
+                  status:
+                    type: string
+                    example: ACTIVE
+                    description: Status of the connectivity, possible values are 'ACTIVE' or 'NOT_ACTIVE'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              'https://api.celitech.net/v1/purchases/{purchaseId}/consumption' \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const purchaseId = 'YOUR_purchaseId_PARAMETER';
+              const resp = await fetch(
+                `https://api.celitech.net/v1/purchases/${purchaseId}/consumption`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            purchase_id = "YOUR_purchaseId_PARAMETER"
+            url = "https://api.celitech.net/v1/purchases/" + purchase_id + "/consumption"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                  var PurchaseId = "YOUR_purchaseId_PARAMETER";
+                var request = await client.GetAsync("https://api.celitech.net/v1/purchases/" + PurchaseId + "/consumption");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var purchaseId = "YOUR_purchaseId_PARAMETER";
+                var pathname = "/v1/purchases/" + purchaseId + "/consumption";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              purchaseId := "YOUR_purchaseId_PARAMETER";
+              reqUrl := "https://api.celitech.net/v1/purchases/" + purchaseId + "/consumption"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            const purchaseId = "YOUR_purchaseId_PARAMETER";
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/purchases/" . purchaseId . "/consumption",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            purchase_id = 'YOUR_purchaseId_PARAMETER'
+            url = URI('https://api.celitech.net/v1/purchases/' + purchase_id + '/consumption')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /esim:
+    get:
+      summary: Get eSIM Status
+      description: Get status from eSIM
+      operationId: getESIM
+      tags:
+        - eSIM
+      parameters:
+        - in: query
+          required: true
+          name: iccid
+          schema:
+            type: string
+            example: "1111222233334444555"
+            description: ID of the eSIM
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      smdpAddress:
+                        type: string
+                        example: celitech.idemia.io
+                        description: SM-DP+ Address
+                      manualActivationCode:
+                        type: string
+                        example: LPA:1$CELITECH.IDEMIA.IO$AAAAA-BBBBB-CCCCC-DDDDD
+                        description: The manual activation code
+                      status:
+                        type: string
+                        example: RELEASED
+                        description: Status of the eSIM, possible values are 'RELEASED', 'DOWNLOADED', 'INSTALLED', 'ENABLED', 'DELETED', or 'ERROR'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              'https://api.celitech.net/v1/esim?iccid=1111222233334444555' \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const query = new URLSearchParams({
+                iccid: '1111222233334444555'
+              }).toString();
+
+              const resp = await fetch(
+                `https://api.celitech.net/v1/esim?${query}`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            url = "https://api.celitech.net/v1/esim"
+
+            query = {
+              "iccid": "1111222233334444555"
+            }
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers, params=query)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                var request = await client.GetAsync("https://api.celitech.net/v1/esim?iccid=1111222233334444555");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+            import java.nio.charset.StandardCharsets;
+            import java.util.stream.Collectors;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("iccid", "1111222233334444555");
+
+                var query = params.keySet().stream()
+                  .map(key -> key + "=" + URLEncoder.encode(params.get(key), StandardCharsets.UTF_8))
+                  .collect(Collectors.joining("&"));
+
+                var host = "https://api.celitech.net";
+                var pathname = "/v1/esim";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname + '?' + query))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              reqUrl := "https://api.celitech.net/v1/esim"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+
+              query := req.URL.Query()
+              query.Add("iccid", "1111222233334444555")
+              req.URL.RawQuery = query.Encode()
+
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            $query = array(
+              "iccid" => "1111222233334444555"
+            );
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/esim?" . http_build_query($query),
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            url = URI('https://api.celitech.net/v1/esim')
+            params = {
+              iccid: '1111222233334444555'
+            }
+            url.query = URI.encode_www_form(params)
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /esim/{iccid}/device:
+    get:
+      summary: Get eSIM Device
+      description: Get device info from an installed eSIM
+      operationId: getESIMDevice
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          schema:
+            type: string
+            example: "1111222233334444555"
+            description: ID of the eSIM
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  device:
+                    type: object
+                    properties:
+                      oem:
+                        type: string
+                        example: Apple
+                        description: Name of the OEM
+                      hardwareName:
+                        type: string
+                        example: iPhone XR
+                        description: Name of the Device
+                      hardwareModel:
+                        type: string
+                        example: A1920
+                        description: Model of the Device
+                      eid:
+                        type: string
+                        example: "12345678901234567890123456789012"
+                        description: Serial Number of the eSIM
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              'https://api.celitech.net/v1/esim/{iccid}/device' \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const iccid = 'YOUR_iccid_PARAMETER';
+              const resp = await fetch(
+                `https://api.celitech.net/v1/esim/${iccid}/device`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            iccid = "YOUR_iccid_PARAMETER"
+            url = "https://api.celitech.net/v1/esim/" + iccid + "/device"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                  var Iccid = "YOUR_iccid_PARAMETER";
+                var request = await client.GetAsync("https://api.celitech.net/v1/esim/" + Iccid + "/device");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var iccid = "YOUR_iccid_PARAMETER";
+                var pathname = "/v1/esim/" + iccid + "/device";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              iccid := "YOUR_iccid_PARAMETER";
+              reqUrl := "https://api.celitech.net/v1/esim/" + iccid + "/device"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            const iccid = "YOUR_iccid_PARAMETER";
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/esim/" . iccid . "/device",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            iccid = 'YOUR_iccid_PARAMETER'
+            url = URI('https://api.celitech.net/v1/esim/' + iccid + '/device')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /esim/{iccid}/history:
+    get:
+      summary: Get eSIM History
+      description: Get history from an eSIM
+      operationId: getESIMHistory
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          schema:
+            type: string
+            example: "1111222233334444555"
+            description: ID of the eSIM
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      history:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                              example: INSTALLED
+                              description: The status of the eSIM at a given time, possible values are 'RELEASED', 'DOWNLOADED', 'INSTALLED', 'ENABLED', 'DELETED', or 'ERROR'
+                            statusDate:
+                              type: string
+                              format: date-time
+                              example: 2023-10-20T00:00:00+00:00
+                              description: The date when the eSIM status changed in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                            date:
+                              deprecated: true
+                              type: number
+                              example: 1599262839
+                              description: Epoch value representing the date when the eSIM status changed
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              'https://api.celitech.net/v1/esim/{iccid}/history' \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const iccid = 'YOUR_iccid_PARAMETER';
+              const resp = await fetch(
+                `https://api.celitech.net/v1/esim/${iccid}/history`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            iccid = "YOUR_iccid_PARAMETER"
+            url = "https://api.celitech.net/v1/esim/" + iccid + "/history"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                  var Iccid = "YOUR_iccid_PARAMETER";
+                var request = await client.GetAsync("https://api.celitech.net/v1/esim/" + Iccid + "/history");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var iccid = "YOUR_iccid_PARAMETER";
+                var pathname = "/v1/esim/" + iccid + "/history";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              iccid := "YOUR_iccid_PARAMETER";
+              reqUrl := "https://api.celitech.net/v1/esim/" + iccid + "/history"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            const iccid = "YOUR_iccid_PARAMETER";
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/esim/" . iccid . "/history",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            iccid = 'YOUR_iccid_PARAMETER'
+            url = URI('https://api.celitech.net/v1/esim/' + iccid + '/history')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+  /esim/{iccid}/mac:
+    get:
+      summary: Get eSIM MAC
+      description: Get MAC from eSIM
+      operationId: getESIMMac
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          schema:
+            type: string
+            example: "1111222233334444555"
+            description: ID of the eSIM
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      smdpAddress:
+                        type: string
+                        example: celitech.idemia.io
+                        description: SM-DP+ Address
+                      manualActivationCode:
+                        type: string
+                        example: LPA:1$CELITECH.IDEMIA.IO$AAAAA-BBBBB-CCCCC-DDDDD
+                        description: The manual activation code
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -i -X GET \
+              'https://api.celitech.net/v1/esim/{iccid}/mac' \
+              -H 'Authorization: Bearer <YOUR_TOKEN_HERE>'
+        - lang: Node.js
+          label: Node.js
+          source: |
+            import fetch from 'node-fetch';
+
+            async function run() {
+              const iccid = 'YOUR_iccid_PARAMETER';
+              const resp = await fetch(
+                `https://api.celitech.net/v1/esim/${iccid}/mac`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: 'Bearer <YOUR_TOKEN_HERE>'
+                  }
+                }
+              );
+
+              const data = await resp.text();
+              console.log(data);
+            }
+
+            run();
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            iccid = "YOUR_iccid_PARAMETER"
+            url = "https://api.celitech.net/v1/esim/" + iccid + "/mac"
+
+            headers = {"Authorization": "Bearer <YOUR_TOKEN_HERE>"}
+
+            response = requests.get(url, headers=headers)
+
+            data = response.json()
+            print(data)
+        - lang: C#
+          label: C#
+          source: |
+            using System;
+            using System.Net.Http;
+            using System.Threading.Tasks;
+
+            public class Program
+            {
+              private readonly IHttpClientFactory _httpClientFactory;
+              public static async Task Main(string[] args)
+              {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>");
+                  var Iccid = "YOUR_iccid_PARAMETER";
+                var request = await client.GetAsync("https://api.celitech.net/v1/esim/" + Iccid + "/mac");
+                var response = await request.Content.ReadAsStringAsync();
+
+                Console.WriteLine(response);
+              }
+            }
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.*;
+            import java.net.http.*;
+            import java.util.*;
+
+            public class App {
+              public static void main(String[] args) throws Exception {
+                var httpClient = HttpClient.newBuilder().build();
+
+                var host = "https://api.celitech.net";
+                var iccid = "YOUR_iccid_PARAMETER";
+                var pathname = "/v1/esim/" + iccid + "/mac";
+                var request = HttpRequest.newBuilder()
+                  .GET()
+                  .uri(URI.create(host + pathname ))
+                  .header("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+                  .build();
+
+                var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println(response.body());
+              }
+            }
+        - lang: Go
+          label: Go
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+              iccid := "YOUR_iccid_PARAMETER";
+              reqUrl := "https://api.celitech.net/v1/esim/" + iccid + "/mac"
+              req, _ := http.NewRequest("GET", reqUrl, nil)
+              req.Header.Add("Authorization", "Bearer <YOUR_TOKEN_HERE>")
+              res, _ := http.DefaultClient.Do(req)
+              defer res.Body.Close()
+              body, _ := ioutil.ReadAll(res.Body)
+
+              fmt.Println(res)
+              fmt.Println(string(body))
+            }
+        - lang: PHP
+          label: PHP
+          source: |
+            /**
+            * Requires libcurl
+            */
+
+            const iccid = "YOUR_iccid_PARAMETER";
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+              CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer <YOUR_TOKEN_HERE>"
+              ],
+              CURLOPT_URL => "https://api.celitech.net/v1/esim/" . iccid . "/mac",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($error) {
+              echo "cURL Error #:" . $error;
+            } else {
+              echo $response;
+            }
+        - lang: Ruby
+          label: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+            require 'openssl'
+
+            iccid = 'YOUR_iccid_PARAMETER'
+            url = URI('https://api.celitech.net/v1/esim/' + iccid + '/mac')
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+
+            request = Net::HTTP::Get.new(url)
+            request['Authorization'] = 'Bearer <YOUR_TOKEN_HERE>'
+
+            response = http.request(request)
+            puts response.read_body
+
+tags:
+  - name: Destinations
+    description: Destinations encapsulate the various countries & regions that CELITECH currently supports.
+
+  - name: eSIM
+    description: The eSIM endpoints encompass a wide range of functionalities related to the partner's owned eSIMs. This includes obtaining detailed information about eSIM devices, eSIM history, determining the current eSIM status, retrieving activation codes, and exploring various other attributes and actions associated with eSIM management.
+
+  - name: Packages
+    description: The Packages endpoint focuses on the data packages offered by CELITECH.
+
+  - name: Purchases
+    description: The Purchases endpoints offer extensive capabilities for managing eSIM purchases. Partners can utilize these endpoints to acquire new eSIMs, top-up an existing eSIM, list all existing purchases, update the activation period for future purchases, monitor the consumption and status of current purchases, and access other functionalities to support different purchasing workflows and requirements.
+
+x-tagGroups:
+  - name: API Endpoints
+    tags:
+      - Destinations
+      - Packages
+      - Purchases
+      - eSIM
