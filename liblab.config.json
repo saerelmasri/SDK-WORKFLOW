@@ -4,7 +4,7 @@
 	"languages": [
     "typescript"
   ],
-  "createDocs": true,
+  "createDocs": false,
   "customizations": {
     "generateEnv": true,
     "devContainer": true,
