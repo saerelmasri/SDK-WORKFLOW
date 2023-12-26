@@ -279,54 +279,51 @@ paths:
           schema:
             type: string
             example: FRA
-          description: ISO representation of the package's destination. Optional, unless startDate and endDate are used, then it becomes mandatory.
+            description: ISO representation of the package's destination. Optional, unless startDate and endDate are used, then it becomes mandatory.
         - in: query
           name: startDate
           schema:
             type: string
             format: date
             example: 2023-11-01
-          description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
+            description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
         - in: query
           name: endDate
           schema:
             type: string
             format: date
             example: 2023-11-20
-          description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
+            description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
         - in: query
           name: afterCursor
           schema:
             type: string
             example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
-          description: To get the next batch of results, use this parameter. It tells the API where to start fetching data after the last item you received. It helps you avoid repeats and efficiently browse through large sets of data.
+            description: To get the next batch of results, use this parameter. It tells the API where to start fetching data after the last item you received. It helps you avoid repeats and efficiently browse through large sets of data.
         - in: query
           name: limit
           schema:
             type: number
             example: 20
-          description: Maximum number of packages to be returned in the response. The value must be greater than 0 and less than or equal to 160. If not provided, the default value is 20
+            description: Maximum number of packages to be returned in the response. The value must be greater than 0 and less than or equal to 160. If not provided, the default value is 20
         - in: query
           name: startTime
           deprecated: true
           schema:
             type: integer
-            example: 1672052449
-          description: [Deprecated] Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months
+            description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months
         - in: query
           name: endTime
           deprecated: true
           schema:
             type: integer
-            example: 1672396681
-          description: [Deprecated] Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time
+            description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time
         - in: query
           name: duration
           deprecated: true
           schema:
             type: number
-            example: 344232
-          description: [Deprecated] Duration in seconds for the package's validity. If this parameter is present, it will override the startTime and endTime parameters. The maximum duration for a package's validity period is 60 days
+            description: Duration in seconds for the package's validity. If this parameter is present, it will override the startTime and endTime parameters. The maximum duration for a package's validity period is 60 days
       responses:
         "200":
           description: Successful Response
@@ -562,44 +559,36 @@ paths:
                   type: string
                   example: FRA
                   description: ISO representation of the package's destination
-                  required: true
                 dataLimitInGB:
                   type: number
                   example: 1
                   description: Size of the package in GB. The available options are 1, 2, 3, 5, 8, 20GB
-                  required: true
                 startDate:
                   type: string
                   format: date
                   example: 2023-11-01
                   description: Start date of the package's validity in the format 'yyyy-MM-dd'. This date can be set to the current day or any day within the next 12 months.
-                  required: true
                 endDate:
                   type: string
                   format: date
                   example: 2023-11-20
                   description: End date of the package's validity in the format 'yyyy-MM-dd'. End date can be maximum 60 days after Start date.
-                  required: true
                 email:
                   type: string
                   example: example@domain.com
                   description: Email address where the purchase confirmation email will be sent (including QR Code & activation steps)
-                  required: false
                 networkBrand:
                   type: string
                   example: CELITECH
                   description: Customize the network brand of the issued eSIM. This parameter is accessible to platforms with Diamond tier and requires an alphanumeric string of up to 15 characters
-                  required: false
                 startTime:
                   deprecated: true
                   type: number
-                  example: 1672051891
-                  description: [Deprecated] Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
                 endTime:
                   deprecated: true
                   type: number
-                  example: 1672396681
-                  description: [Deprecated] Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time. 
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time. 
               required:
                 - destination
                 - dataLimitInGB
@@ -642,13 +631,11 @@ paths:
                       startTime:
                         deprecated: true
                         type: number
-                        example: 1672051891
-                        description: [Deprecated] Epoch value representing the start time of the package's validity
+                        description: Epoch value representing the start time of the package's validity
                       endTime:
                         deprecated: true
                         type: number
-                        example: 1672396681
-                        description: [Deprecated] Epoch value representing the end time of the package's validity
+                        description: Epoch value representing the end time of the package's validity
                   profile:
                     type: object
                     properties:
@@ -953,15 +940,13 @@ paths:
           deprecated: true
           schema:
             type: number
-            example: 1672052365
-          description: [Deprecated] Epoch value representing the start of the time interval for filtering purchases
+          description: Epoch value representing the start of the time interval for filtering purchases
         - in: query
           name: before
           deprecated: true
           schema:
             type: number
-            example: 1672396681
-          description: [Deprecated] Epoch value representing the end of the time interval for filtering purchases
+          description: Epoch value representing the end of the time interval for filtering purchases
       responses:
         "200":
           description: Successful Response
@@ -997,18 +982,15 @@ paths:
                         startTime:
                           deprecated: true
                           type: number
-                          example: 1073741824
-                          description: [Deprecated] Epoch value representing the start time of the package's validity
+                          description: Epoch value representing the start time of the package's validity
                         endTime:
                           deprecated: true
                           type: number
-                          example: 1073841824
-                          description: [Deprecated] Epoch value representing the end time of the package's validity
+                          description: Epoch value representing the end time of the package's validity
                         createdAt:
                           deprecated: true
                           type: number
-                          example: 1073841824
-                          description: [Deprecated] Epoch value representing the date of creation of the purchase
+                          description: Epoch value representing the date of creation of the purchase
                         package:
                           type: object
                           properties:
@@ -1266,13 +1248,11 @@ paths:
                 startTime:
                   deprecated: true
                   type: number
-                  example: 1672051891
-                  description: [Deprecated] Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
                 endTime:
                   deprecated: true
                   type: number
-                  example: 1672396681
-                  description: [Deprecated] Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
               required:
                 - iccid
                 - dataLimitInGB
@@ -1315,13 +1295,11 @@ paths:
                       startTime:
                         deprecated: true
                         type: number
-                        example: 1672051891
-                        description: [Deprecated] Epoch value representing the start time of the package's validity
+                        description: Epoch value representing the start time of the package's validity
                       endTime:
                         deprecated: true
                         type: number
-                        example: 1672396681
-                        description: [Deprecated] Epoch value representing the end time of the package's validity
+                        description: Epoch value representing the end time of the package's validity
                   profile:
                     type: object
                     properties:
@@ -1609,13 +1587,11 @@ paths:
                 startTime:
                   deprecated: true
                   type: number
-                  example: 1672051891
-                  description: [Deprecated] Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
+                  description: Epoch value representing the start time of the package's validity. This timestamp can be set to the current time or any time within the next 12 months.
                 endTime:
                   deprecated: true
                   type: number
-                  example: 1672396681
-                  description: [Deprecated] Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
+                  description: Epoch value representing the end time of the package's validity. End time can be maximum 60 days after Start time.
       responses:
         "200":
           description: Successful Response
@@ -1641,13 +1617,11 @@ paths:
                   newStartTime:
                     deprecated: true
                     type: number
-                    example: 1579168309
-                    description: [Deprecated] Epoch value representing the new start time of the package's validity
+                    description: Epoch value representing the new start time of the package's validity
                   newEndTime:
                     deprecated: true
                     type: number
-                    example: 1579178309
-                    description: [Deprecated] Epoch value representing the new end time of the package's validity
+                    description: Epoch value representing the new end time of the package's validity
         "400":
           description: Bad Request
           content:
@@ -2628,8 +2602,7 @@ paths:
                             date:
                               deprecated: true
                               type: number
-                              example: 1599262839
-                              description: [Deprecated] Epoch value representing the date when the eSIM status changed
+                              description: Epoch value representing the date when the eSIM status changed
         "400":
           description: Bad Request
           content:
