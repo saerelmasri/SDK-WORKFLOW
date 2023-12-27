@@ -1,5 +1,5 @@
 {
-	"sdkName": "celitech",
+	"sdkName": "test-celitech-liblab",
 	"specFilePath": "swagger1.yaml",
 	"languages": [
     "typescript"
@@ -38,7 +38,7 @@
       "bundle": false,
       "exportClassDefault": false,
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
-      "sdkVersion": "1.1.5",
+      "sdkVersion": "1.1.6",
       "ignoreFiles": []
     }
   },
