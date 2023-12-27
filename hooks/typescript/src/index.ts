@@ -1,4 +1,4 @@
-import { Celitech } from '..';
+import { Testcelitechliblab } from '..';
 import HTTPLibrary from '../http/HTTPLibrary';
 
 let CURRENT_TOKEN = '';
