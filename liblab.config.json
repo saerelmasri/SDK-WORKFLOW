@@ -1,9 +1,7 @@
 {
-	"sdkName": "test-celitech-liblab",
-	"specFilePath": "swagger1.yaml",
-	"languages": [
-    "typescript"
-  ],
+  "sdkName": "celitech",
+  "specFilePath": "swagger1.yaml",
+  "languages": ["typescript", "java"],
   "createDocs": true,
   "customizations": {
     "generateEnv": true,
@@ -19,7 +17,7 @@
     "injectedModels": [],
     "inferServiceNames": false,
     "responseHeaders": false,
-    "environmentVariables" : [
+    "environmentVariables": [
       {
         "name": "CLIENT_ID",
         "description": "Client ID parameter"
@@ -29,7 +27,7 @@
         "description": "Client Secret parameter"
       }
     ]
-},
+  },
   "languageOptions": {
     "typescript": {
       "npmName": "test-celitech-liblab",
@@ -40,10 +38,15 @@
       "githubRepoName": "Test-SDK-Celitecth-Typescript",
       "sdkVersion": "1.1.6",
       "ignoreFiles": []
-    }
+    },
+    "java": {
+        "sdkVersion": "1.1.6",
+        "ignoreFiles": [],
+        "groupId": "celitech.sdkTest",
+        "githubRepoName": "Test-SDK-Celitecth-Java"
+      }
   },
   "publishing": {
     "githubOrg": "saerelmasri"
   }
-  
 }
