@@ -34,12 +34,12 @@
   },
   "languageOptions": {
     "java":{
-      "sdkVersion": "1.1.7",
+      "sdkVersion": "1.1.8",
       "ignoreFiles": [],
       "githubRepoName": "Test-SDK-Celitecth-Java"
     },
     "python":{
-      "sdkVersion": "1.1.7",
+      "sdkVersion": "1.1.8",
       "ignoreFiles": [],
       "githubRepoName": "Test-SDK-Celitecth-Python"
     },
