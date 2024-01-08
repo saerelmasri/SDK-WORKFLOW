@@ -36,12 +36,14 @@
     "java":{
       "sdkVersion": "1.1.8",
       "ignoreFiles": [],
-      "githubRepoName": "Test-SDK-Celitecth-Java"
+      "githubRepoName": "Test-SDK-Celitecth-Java",
+      "groupId":"com.github.saerelmasri"
     },
     "python":{
       "sdkVersion": "1.1.8",
       "ignoreFiles": [],
-      "githubRepoName": "Test-SDK-Celitecth-Python"
+      "githubRepoName": "Test-SDK-Celitecth-Python",
+      "pypiPackageName": "test-celitech-liblab"
     },
     "typescript": {
       "npmName": "test-celitech-liblab",
