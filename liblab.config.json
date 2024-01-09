@@ -1,5 +1,5 @@
 {
-  "sdkName": "Celitech",
+  "sdkName": "celitech",
   "specFilePath": "swagger1.yaml",
   "languages": [
     "typescript"
